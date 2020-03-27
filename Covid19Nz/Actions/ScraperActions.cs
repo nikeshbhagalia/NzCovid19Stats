@@ -32,7 +32,7 @@ namespace Covid19Nz.Actions
                 .Select(c => new RegionDetails
                 {
                     DHB = HttpUtility.HtmlDecode(c[0]),
-                    TotalCases = Int32.Parse(c[1])
+                    TotalCases = Int32.Parse(HttpUtility.HtmlDecode(c[1]))
                 }).ToList();
 
             return regionDetails;
@@ -48,10 +48,10 @@ namespace Covid19Nz.Actions
                     .Split(new[] { "\n" }, StringSplitOptions.None))
                 .Select(c => new CaseDetails
                 {
-                    Case = Int32.Parse(c[0]),
+                    Case = Int32.Parse(HttpUtility.HtmlDecode(c[0])),
                     DHB = HttpUtility.HtmlDecode(c[1]),
-                    Age = c[2],
-                    Gender = c[3],
+                    Age = HttpUtility.HtmlDecode(c[2]),
+                    Gender = HttpUtility.HtmlDecode(c[3]),
                     Details = HttpUtility.HtmlDecode(c[4])
                 }).ToList();
 
