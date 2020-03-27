@@ -27,12 +27,11 @@ namespace Covid19Nz.Actions
             var tableBody = document.DocumentNode.SelectSingleNode(RegionDetailsXpath);
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
-            var regionDetails = tableRows.Select(r => r.InnerText.Trim().Replace("\t", "")
-                    .Split(new[] { "\n" }, StringSplitOptions.None))
+            var regionDetails = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"))
                 .Select(c => new RegionDetails
                 {
-                    DHB = HttpUtility.HtmlDecode(c[0]),
-                    TotalCases = Int32.Parse(HttpUtility.HtmlDecode(c[1]))
+                    DHB = FormatString(c.ElementAt(0).InnerText),
+                    TotalCases = Int32.Parse(FormatString(c.ElementAt(1).InnerText))
                 }).ToList();
 
             return regionDetails;
@@ -44,18 +43,22 @@ namespace Covid19Nz.Actions
             var tableBody = document.DocumentNode.SelectSingleNode(CaseDetailsXpath);
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
-            var caseDetails = tableRows.Select(r => r.InnerText.Trim().Replace("\t", "")
-                    .Split(new[] { "\n" }, StringSplitOptions.None))
+            var caseDetails = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"))
                 .Select(c => new CaseDetails
                 {
-                    Case = Int32.Parse(HttpUtility.HtmlDecode(c[0])),
-                    DHB = HttpUtility.HtmlDecode(c[1]),
-                    Age = HttpUtility.HtmlDecode(c[2]),
-                    Gender = HttpUtility.HtmlDecode(c[3]),
-                    Details = HttpUtility.HtmlDecode(c[4])
+                    Case = Int32.Parse(FormatString(c.ElementAt(0).InnerText)),
+                    DHB = FormatString(c.ElementAt(1).InnerText),
+                    Age = FormatString(c.ElementAt(2).InnerText),
+                    Gender = FormatString(c.ElementAt(3).InnerText),
+                    Details = FormatString(c.ElementAt(4).InnerText)
                 }).ToList();
 
             return caseDetails;
+        }
+
+        private string FormatString(string value)
+        {
+            return HttpUtility.HtmlDecode(value).Trim();
         }
     }
 }
