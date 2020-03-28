@@ -30,8 +30,8 @@ namespace Covid19Nz.Controllers
             }
         }
 
-        [HttpGet("caseDetails")]
-        public ActionResult<ICollection<CaseDetails>> GetCaseDetails()
+        [HttpGet("confirmedCaseDetails")]
+        public ActionResult<ICollection<CaseDetails>> GetConfirmedCaseDetails()
         {
             try
             {
