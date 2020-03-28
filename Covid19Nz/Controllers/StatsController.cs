@@ -42,5 +42,18 @@ namespace Covid19Nz.Controllers
                 throw;
             }
         }
+
+        [HttpGet("probableCaseDetails")]
+        public ActionResult<ICollection<CaseDetails>> GetProbableCaseDetails()
+        {
+            try
+            {
+                return _scraperActions.GetProbableCaseDetails();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

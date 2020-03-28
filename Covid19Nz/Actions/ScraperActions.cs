@@ -10,7 +10,8 @@ namespace Covid19Nz.Actions
     public class ScraperActions : IScraperActions
     {
         private const string RegionDetailsXpath = "//caption[contains(.,'Total cases by DHB')]/..//tbody";
-        private const string CaseDetailsXpath = "//caption[contains(.,'Confirmed COVID-19 cases')]/..//tbody";
+        private const string ConfirmedCaseDetailsXpath = "//caption[contains(.,'Confirmed COVID-19 cases')]/..//tbody";
+        private const string ProbableCaseDetailsXpath = "//caption[contains(.,'Probable COVID-19 cases')]/..//tbody";
 
         private readonly Sources _sources;
         private readonly HtmlWeb _htmlWeb;
@@ -40,7 +41,22 @@ namespace Covid19Nz.Actions
         public List<CaseDetails> GetConfirmedCaseDetails()
         {
             var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
-            var tableBody = document.DocumentNode.SelectSingleNode(CaseDetailsXpath);
+            var caseDetails = ToCaseDetails(document, ConfirmedCaseDetailsXpath);
+
+            return caseDetails;
+        }
+
+        public List<CaseDetails> GetProbableCaseDetails()
+        {
+            var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
+            var caseDetails = ToCaseDetails(document, ProbableCaseDetailsXpath);
+
+            return caseDetails;
+        }
+
+        private List<CaseDetails> ToCaseDetails(HtmlDocument document, string xpath)
+        {
+            var tableBody = document.DocumentNode.SelectSingleNode(xpath);
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
             var caseDetails = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"))

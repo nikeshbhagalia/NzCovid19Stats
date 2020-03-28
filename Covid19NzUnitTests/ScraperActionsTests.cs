@@ -33,9 +33,18 @@ namespace Covid19NzUnitTests
         }
 
         [Test]
-        public void GetCaseDetailsShouldNotBeEmpty()
+        public void GetConfirmedCaseDetailsShouldNotBeEmpty()
         {
             var caseDetails = _scraperActions.GetConfirmedCaseDetails();
+
+            Assert.IsNotNull(caseDetails);
+            Assert.IsNotEmpty(caseDetails);
+        }
+
+        [Test]
+        public void GetProbableCaseDetailsShouldNotBeEmpty()
+        {
+            var caseDetails = _scraperActions.GetProbableCaseDetails();
 
             Assert.IsNotNull(caseDetails);
             Assert.IsNotEmpty(caseDetails);
