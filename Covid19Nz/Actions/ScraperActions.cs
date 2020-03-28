@@ -58,7 +58,7 @@ namespace Covid19Nz.Actions
 
         private string FormatString(string value)
         {
-            return HttpUtility.HtmlDecode(value).Trim();
+            return HttpUtility.HtmlDecode(value).Trim().Replace("\t", string.Empty);
         }
     }
 }
