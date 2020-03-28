@@ -2,8 +2,6 @@ using Covid19Nz.Actions;
 using Covid19Nz.Models;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using System;
-using System.Linq;
 
 namespace Covid19NzUnitTests
 {
