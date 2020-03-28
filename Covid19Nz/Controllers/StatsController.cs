@@ -1,6 +1,7 @@
 ﻿using Covid19Nz.Actions;
 using Covid19Nz.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -18,7 +19,7 @@ namespace Covid19Nz.Controllers
         }
 
         [HttpGet("regionDetails")]
-        public ActionResult<ICollection<RegionDetails>> GetRegionDetails()
+        public ActionResult<JArray> GetRegionDetails()
         {
             try
             {
@@ -31,7 +32,7 @@ namespace Covid19Nz.Controllers
         }
 
         [HttpGet("confirmedCaseDetails")]
-        public ActionResult<ICollection<CaseDetails>> GetConfirmedCaseDetails()
+        public ActionResult<JArray> GetConfirmedCaseDetails()
         {
             try
             {
@@ -44,7 +45,7 @@ namespace Covid19Nz.Controllers
         }
 
         [HttpGet("probableCaseDetails")]
-        public ActionResult<ICollection<CaseDetails>> GetProbableCaseDetails()
+        public ActionResult<JArray> GetProbableCaseDetails()
         {
             try
             {

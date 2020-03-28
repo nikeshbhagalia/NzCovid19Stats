@@ -1,14 +1,15 @@
 ﻿using Covid19Nz.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Covid19Nz.Actions
 {
     public interface IScraperActions
     {
-        List<RegionDetails> GetRegionDetails();
+        JArray GetRegionDetails();
 
-        List<CaseDetails> GetConfirmedCaseDetails();
+        JArray GetConfirmedCaseDetails();
 
-        List<CaseDetails> GetProbableCaseDetails();
+        JArray GetProbableCaseDetails();
     }
 }
