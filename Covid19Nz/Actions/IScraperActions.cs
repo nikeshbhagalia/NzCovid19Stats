@@ -8,5 +8,7 @@ namespace Covid19Nz.Actions
         List<RegionDetails> GetRegionDetails();
 
         List<CaseDetails> GetConfirmedCaseDetails();
+
+        List<CaseDetails> GetProbableCaseDetails();
     }
 }
