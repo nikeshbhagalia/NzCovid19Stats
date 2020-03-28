@@ -4,19 +4,31 @@ namespace Covid19Nz.Models
 {
     public class CaseDetails
     {
-        [JsonProperty(nameof(Case))]
-        public int Case { get; set; }
+        [JsonProperty("Report Date")]
+        public string ReportDate { get; set; }
+
+        [JsonProperty(nameof(Sex))]
+        public string Sex { get; set; }
+
+        [JsonProperty("Age group")]
+        public string AgeGroup { get; set; }
 
         [JsonProperty(nameof(DHB))]
         public string DHB { get; set; }
 
-        [JsonProperty(nameof(Age))]
-        public string Age { get; set; }
+        [JsonProperty(nameof(Overseas))]
+        public string Overseas { get; set; }
 
-        [JsonProperty(nameof(Gender))]
-        public string Gender { get; set; }
+        [JsonProperty("Last City before NZ")]
+        public string LastCityBeforeNZ { get; set; }
 
-        [JsonProperty(nameof(Details))]
-        public string Details { get; set; }
+        [JsonProperty("Flight No")]
+        public string FlightNo { get; set; }
+
+        [JsonProperty("Departure date")]
+        public string DepartureDate { get; set; }
+
+        [JsonProperty("Arrival date")]
+        public string ArrivalDate { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace Covid19Nz.Actions
     {
         List<RegionDetails> GetRegionDetails();
 
-        List<CaseDetails> GetCaseDetails();
+        List<CaseDetails> GetConfirmedCaseDetails();
     }
 }
