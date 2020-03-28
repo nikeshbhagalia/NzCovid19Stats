@@ -37,7 +37,7 @@ namespace Covid19Nz.Actions
             return regionDetails;
         }
 
-        public List<CaseDetails> GetCaseDetails()
+        public List<CaseDetails> GetConfirmedCaseDetails()
         {
             var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
             var tableBody = document.DocumentNode.SelectSingleNode(CaseDetailsXpath);
@@ -46,11 +46,15 @@ namespace Covid19Nz.Actions
             var caseDetails = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"))
                 .Select(c => new CaseDetails
                 {
-                    Case = Int32.Parse(FormatString(c.ElementAt(0).InnerText)),
-                    DHB = FormatString(c.ElementAt(1).InnerText),
-                    Age = FormatString(c.ElementAt(2).InnerText),
-                    Gender = FormatString(c.ElementAt(3).InnerText),
-                    Details = FormatString(c.ElementAt(4).InnerText)
+                    ReportDate = FormatString(c.ElementAt(0).InnerText),
+                    Sex = FormatString(c.ElementAt(1).InnerText),
+                    AgeGroup = FormatString(c.ElementAt(2).InnerText),
+                    DHB = FormatString(c.ElementAt(3).InnerText),
+                    Overseas = FormatString(c.ElementAt(4).InnerText),
+                    LastCityBeforeNZ = FormatString(c.ElementAt(5).InnerText),
+                    FlightNo = FormatString(c.ElementAt(6).InnerText),
+                    DepartureDate = FormatString(c.ElementAt(7).InnerText),
+                    ArrivalDate = FormatString(c.ElementAt(8).InnerText)
                 }).ToList();
 
             return caseDetails;

@@ -35,7 +35,7 @@ namespace Covid19Nz.Controllers
         {
             try
             {
-                return _scraperActions.GetCaseDetails();
+                return _scraperActions.GetConfirmedCaseDetails();
             }
             catch (Exception)
             {
