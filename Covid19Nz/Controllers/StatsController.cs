@@ -56,5 +56,18 @@ namespace Covid19Nz.Controllers
                 throw;
             }
         }
+
+        [HttpGet("summary")]
+        public ActionResult<JArray> GetSummary()
+        {
+            try
+            {
+                return _scraperActions.GetSummary();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
