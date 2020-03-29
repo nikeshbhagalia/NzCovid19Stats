@@ -43,13 +43,21 @@ namespace Covid19Nz.Actions
             return caseDetails;
         }
 
+        public JArray GetSummary()
+        {
+            var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
+            var summary = GetContentDynamically(document, _sources.SummaryXpath);
+
+            return summary;
+        }
+
         private JArray GetContentDynamically(HtmlDocument document, string xpath)
         {
             var table = document.DocumentNode.SelectSingleNode(xpath);
             var propertyNames = table.ChildNodes.First(cn => cn.Name == "thead")
                 .ChildNodes.First(cn => cn.Name == "tr")
                 .ChildNodes.Where(cn => cn.Name == "th")
-                .Select(th => th.InnerText)
+                .Select(th => HttpUtility.HtmlDecode(th.InnerText).Trim())
                 .ToList();
 
             var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");

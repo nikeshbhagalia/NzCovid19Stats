@@ -47,5 +47,14 @@ namespace Covid19NzUnitTests
             Assert.IsNotNull(caseDetails);
             Assert.IsNotEmpty(caseDetails);
         }
+
+        [Test]
+        public void GetSummaryShouldNotBeEmpty()
+        {
+            var summary = _scraperActions.GetSummary();
+
+            Assert.IsNotNull(summary);
+            Assert.IsNotEmpty(summary);
+        }
     }
 }

@@ -11,5 +11,7 @@
         public string ConfirmedCaseDetailsXpath { get; set; }
 
         public string ProbableCaseDetailsXpath { get; set; }
+
+        public string SummaryXpath { get; set; }
     }
 }

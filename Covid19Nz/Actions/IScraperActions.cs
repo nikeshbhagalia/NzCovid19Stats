@@ -11,5 +11,7 @@ namespace Covid19Nz.Actions
         JArray GetConfirmedCaseDetails();
 
         JArray GetProbableCaseDetails();
+
+        JArray GetSummary();
     }
 }
