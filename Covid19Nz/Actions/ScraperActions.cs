@@ -46,18 +46,19 @@ namespace Covid19Nz.Actions
         public JArray GetSummary()
         {
             var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
-            var summary = GetContentDynamically(document, _sources.SummaryXpath);
+            var summary = GetContentDynamically(document, _sources.SummaryXpath, "title");
 
             return summary;
         }
 
-        private JArray GetContentDynamically(HtmlDocument document, string xpath)
+        private JArray GetContentDynamically(HtmlDocument document, string xpath, string emptyKeyReplacement = "")
         {
             var table = document.DocumentNode.SelectSingleNode(xpath);
             var propertyNames = table.ChildNodes.First(cn => cn.Name == "thead")
                 .ChildNodes.First(cn => cn.Name == "tr")
                 .ChildNodes.Where(cn => cn.Name == "th")
                 .Select(th => HttpUtility.HtmlDecode(th.InnerText).Trim())
+                .Select(pn => string.IsNullOrEmpty(pn) ? emptyKeyReplacement : pn)
                 .ToList();
 
             var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
