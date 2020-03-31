@@ -4,12 +4,18 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 
 namespace Covid19Nz.Actions
 {
     public class ScraperActions : IScraperActions
     {
+        private const string RegionDetailsCacheKey = "RegionDetails";
+        private const string ConfirmedCaseDetailsCacheKey = "ConfirmedCaseDetails";
+        private const string ProbableCaseDetailsCacheKey = "ProbableCaseDetails";
+        private const string SummaryCacheKey = "Summary";
+
         private readonly Sources _sources;
         private readonly HtmlWeb _htmlWeb;
 
@@ -21,34 +27,46 @@ namespace Covid19Nz.Actions
 
         public JArray GetRegionDetails()
         {
-            var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
-            var regionDetails = GetContentDynamically(document, _sources.RegionDetailsXpath);
+            if (RegionDetails is null)
+            {
+                var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
+                RegionDetails = GetContentDynamically(document, _sources.RegionDetailsXpath);
+            }
 
-            return regionDetails;
+            return RegionDetails;
         }
 
         public JArray GetConfirmedCaseDetails()
         {
-            var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
-            var caseDetails = GetContentDynamically(document, _sources.ConfirmedCaseDetailsXpath);
+            if (ConfirmedCaseDetails is null)
+            {
+                var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
+                ConfirmedCaseDetails = GetContentDynamically(document, _sources.ConfirmedCaseDetailsXpath);
+            }
 
-            return caseDetails;
+            return ConfirmedCaseDetails;
         }
 
         public JArray GetProbableCaseDetails()
         {
-            var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
-            var caseDetails = GetContentDynamically(document, _sources.ProbableCaseDetailsXpath);
+            if (ProbableCaseDetails is null)
+            {
+                var document = _htmlWeb.Load(_sources.CaseDetailsUrl);
+                ProbableCaseDetails = GetContentDynamically(document, _sources.ProbableCaseDetailsXpath);
+            }
 
-            return caseDetails;
+            return ProbableCaseDetails;
         }
 
         public JArray GetSummary()
         {
-            var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
-            var summary = GetContentDynamically(document, _sources.SummaryXpath, "title");
+            if (Summary is null)
+            {
+                var document = _htmlWeb.Load(_sources.RegionDetailsUrl);
+                Summary = GetContentDynamically(document, _sources.SummaryXpath, "title");
+            }
 
-            return summary;
+            return Summary;
         }
 
         private JArray GetContentDynamically(HtmlDocument document, string xpath, string emptyKeyReplacement = "")
@@ -119,6 +137,86 @@ namespace Covid19Nz.Actions
         private string FormatString(string value)
         {
             return HttpUtility.HtmlDecode(value).Trim().Replace("\t", string.Empty);
+        }
+
+        internal JArray RegionDetails
+        {
+            get => MemoryCache.Default.Get(RegionDetailsCacheKey) as JArray;
+            set
+            {
+                MemoryCache.Default.Remove(RegionDetailsCacheKey);
+                if (value is null)
+                {
+                    return;
+                }
+
+                var cacheItemPolicy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTime.Now.AddHours(1)
+                };
+
+                MemoryCache.Default.Add(RegionDetailsCacheKey, value, cacheItemPolicy);
+            }
+        }
+
+        internal JArray ConfirmedCaseDetails
+        {
+            get => MemoryCache.Default.Get(ConfirmedCaseDetailsCacheKey) as JArray;
+            set
+            {
+                MemoryCache.Default.Remove(ConfirmedCaseDetailsCacheKey);
+                if (value is null)
+                {
+                    return;
+                }
+
+                var cacheItemPolicy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTime.Now.AddHours(1)
+                };
+
+                MemoryCache.Default.Add(ConfirmedCaseDetailsCacheKey, value, cacheItemPolicy);
+            }
+        }
+
+        internal JArray ProbableCaseDetails
+        {
+            get => MemoryCache.Default.Get(ProbableCaseDetailsCacheKey) as JArray;
+            set
+            {
+                MemoryCache.Default.Remove(ProbableCaseDetailsCacheKey);
+                if (value is null)
+                {
+                    return;
+                }
+
+                var cacheItemPolicy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTime.Now.AddHours(1)
+                };
+
+                MemoryCache.Default.Add(ProbableCaseDetailsCacheKey, value, cacheItemPolicy);
+            }
+        }
+
+        internal JArray Summary
+        {
+            get => MemoryCache.Default.Get(SummaryCacheKey) as JArray;
+            set
+            {
+                MemoryCache.Default.Remove(SummaryCacheKey);
+                if (value is null)
+                {
+                    return;
+                }
+
+                var cacheItemPolicy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTime.Now.AddHours(1)
+                };
+
+                MemoryCache.Default.Add(SummaryCacheKey, value, cacheItemPolicy);
+            }
         }
     }
 }
