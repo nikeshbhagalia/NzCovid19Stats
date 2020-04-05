@@ -82,7 +82,7 @@ namespace Covid19Nz.Actions
             var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
-            var tableData = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"));
+            var tableData = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td" || d.Name == "th"));
 
             var details = new JArray();
             foreach (var data in tableData)
