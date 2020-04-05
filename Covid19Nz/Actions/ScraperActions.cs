@@ -94,7 +94,7 @@ namespace Covid19Nz.Actions
                     var content = FormatString(data.ElementAt(index).InnerText);
 
                     JProperty property;
-                    if (Int32.TryParse(content, out var number))
+                    if (Int32.TryParse(content.Replace(",", ""), out var number))
                     {
                         property = new JProperty(propertyName, number);
                     }
