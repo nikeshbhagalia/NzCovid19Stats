@@ -87,6 +87,11 @@ namespace Covid19Nz.Actions
             var details = new JArray();
             foreach (var data in tableData)
             {
+                if (data.Count() < propertyNames.Count)
+                {
+                    continue;
+                }
+
                 var detail = new JObject();
                 for (var index = 0; index < propertyNames.Count; index++)
                 {
