@@ -82,21 +82,36 @@ namespace Covid19Nz.Actions
             var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
-            var tableData = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td" || d.Name == "th"));
-
+            var tableData = tableRows
+                .Select(r => r.ChildNodes
+                    .Where(d => d.Name == "td" || d.Name == "th")
+                    .ToList());
+                
             var details = new JArray();
             foreach (var data in tableData)
             {
                 if (data.Count() < propertyNames.Count)
                 {
-                    continue;
+                    for (var index = 0; index < data.Count(); index++)
+                    {
+                        var hasColspan = Int32.TryParse(data[index].Attributes.SingleOrDefault(a => a.Name == "colspan")?.Value, out var colspanValue);
+                        if (hasColspan && colspanValue > 1)
+                        {
+                            var htmlNode = data[index].NextSibling.NextSibling.Clone();
+                            
+                            for (var colspan = 1; colspan < colspanValue; colspan++)
+                            {
+                                data.Insert(index + colspan, htmlNode);
+                            }
+                        }
+                    }
                 }
 
                 var detail = new JObject();
                 for (var index = 0; index < propertyNames.Count; index++)
                 {
                     var propertyName = propertyNames[index];
-                    var content = FormatString(data.ElementAt(index).InnerText);
+                    var content = FormatString(data[index].InnerText);
 
                     JProperty property;
                     if (Int32.TryParse(content.Replace(",", ""), out var number))
