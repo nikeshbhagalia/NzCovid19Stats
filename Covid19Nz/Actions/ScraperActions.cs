@@ -72,20 +72,29 @@ namespace Covid19Nz.Actions
         private JArray GetContentDynamically(HtmlDocument document, string xpath, string emptyKeyReplacement = "")
         {
             var table = document.DocumentNode.SelectSingleNode(xpath);
-            var propertyNames = table.ChildNodes.First(cn => cn.Name == "thead")
+            var head = table.ChildNodes.FirstOrDefault(cn => cn.Name == "thead");
+            var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
+
+            var parentNode = head is null ? tableBody : head;
+
+            var propertyNames = parentNode
                 .ChildNodes.First(cn => cn.Name == "tr")
                 .ChildNodes.Where(cn => cn.Name == "th")
                 .Select(th => HttpUtility.HtmlDecode(th.InnerText).Trim())
                 .Select(pn => string.IsNullOrEmpty(pn) ? emptyKeyReplacement : pn)
                 .ToList();
-
-            var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
+            
             var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
             var tableData = tableRows
                 .Select(r => r.ChildNodes
                     .Where(d => d.Name == "td" || d.Name == "th")
                     .ToList());
+
+            if (head is null)
+            {
+                tableData = tableData.Skip(1);
+            }
                 
             var details = new JArray();
             foreach (var data in tableData)
