@@ -69,32 +69,21 @@ namespace Covid19Nz.Actions
             return Summary;
         }
 
-        private JArray GetContentDynamically(HtmlDocument document, string xpath, string emptyKeyReplacement = "")
+        private JArray GetContentDynamically(HtmlDocument document, string tableXPath, string emptyKeyReplacement = "")
         {
-            var table = document.DocumentNode.SelectSingleNode(xpath);
-            var head = table.ChildNodes.FirstOrDefault(cn => cn.Name == "thead");
-            var tableBody = table.ChildNodes.First(cn => cn.Name == "tbody");
+            var tableRows = document.DocumentNode.SelectNodes($"{tableXPath}//tr");
 
-            var parentNode = head is null ? tableBody : head;
-
-            var propertyNames = parentNode
-                .ChildNodes.First(cn => cn.Name == "tr")
-                .ChildNodes.Where(cn => cn.Name == "th")
+            var propertyNames = tableRows.First()
+                .ChildNodes.Where(cn => cn.Name.StartsWith("t"))
                 .Select(th => HttpUtility.HtmlDecode(th.InnerText).Trim())
                 .Select(pn => string.IsNullOrEmpty(pn) ? emptyKeyReplacement : pn)
                 .ToList();
-            
-            var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
 
             var tableData = tableRows
+                .Skip(1)
                 .Select(r => r.ChildNodes
-                    .Where(d => d.Name == "td" || d.Name == "th")
+                    .Where(cn => cn.Name.StartsWith("t"))
                     .ToList());
-
-            if (head is null)
-            {
-                tableData = tableData.Skip(1);
-            }
                 
             var details = new JArray();
             foreach (var data in tableData)
