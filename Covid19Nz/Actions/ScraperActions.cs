@@ -130,28 +130,6 @@ namespace Covid19Nz.Actions
             return details;
         }
 
-        private List<CaseDetails> ToCaseDetails(HtmlDocument document, string xpath)
-        {
-            var tableBody = document.DocumentNode.SelectSingleNode(xpath);
-            var tableRows = tableBody.ChildNodes.Where(n => n.Name == "tr");
-
-            var caseDetails = tableRows.Select(r => r.ChildNodes.Where(d => d.Name == "td"))
-                .Select(c => new CaseDetails
-                {
-                    ReportDate = FormatString(c.ElementAt(0).InnerText),
-                    Sex = FormatString(c.ElementAt(1).InnerText),
-                    AgeGroup = FormatString(c.ElementAt(2).InnerText),
-                    DHB = FormatString(c.ElementAt(3).InnerText),
-                    Overseas = FormatString(c.ElementAt(4).InnerText),
-                    LastCityBeforeNZ = FormatString(c.ElementAt(5).InnerText),
-                    FlightNo = FormatString(c.ElementAt(6).InnerText),
-                    DepartureDate = FormatString(c.ElementAt(7).InnerText),
-                    ArrivalDate = FormatString(c.ElementAt(8).InnerText)
-                }).ToList();
-
-            return caseDetails;
-        }
-
         private string FormatString(string value)
         {
             return HttpUtility.HtmlDecode(value).Trim().Replace("\t", string.Empty);
