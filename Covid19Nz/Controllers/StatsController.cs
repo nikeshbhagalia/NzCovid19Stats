@@ -18,7 +18,7 @@ namespace Covid19Nz.Controllers
             _scraperActions = scraperActions;
         }
 
-        [HttpGet("regionDetails")]
+        [HttpGet("regiondetails")]
         public ActionResult<JArray> GetRegionDetails()
         {
             try
@@ -31,7 +31,7 @@ namespace Covid19Nz.Controllers
             }
         }
 
-        [HttpGet("confirmedCaseDetails")]
+        [HttpGet("confirmedcasedetails")]
         public ActionResult<JArray> GetConfirmedCaseDetails()
         {
             try
@@ -44,7 +44,7 @@ namespace Covid19Nz.Controllers
             }
         }
 
-        [HttpGet("probableCaseDetails")]
+        [HttpGet("probablecasedetails")]
         public ActionResult<JArray> GetProbableCaseDetails()
         {
             try
