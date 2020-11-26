@@ -36,7 +36,7 @@ namespace Covid19Nz.Controllers
         {
             try
             {
-                return _scraperActions.GetConfirmedCaseDetails();
+                return new JArray();
             }
             catch (Exception)
             {
