@@ -1,2 +1,2 @@
 # NzCovid19Stats
-NZ Covid 19 aggregated statistics api via ministry of health government website
+New Zealand Covid 19 aggregated statistics api via ministry of health government website
